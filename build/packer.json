@@ -42,7 +42,7 @@
         },
         {
             "type": "shell",
-            "script": "cd ~ && ./{{user `node_pack`}}"
+            "script": "cd ~ && tar -xvzf ./{{user `node_pack`}} && cd package/ && npm start"
         }
     ]
 }
