@@ -6,16 +6,6 @@ pipeline {
     stages{
          stage('Configure Jenkins'){
              steps {
-                // sh '''
-                //     rm -rf jenkins-tools
-                //     ls jenkins-tools/unzip >>/dev/null 2>&1 && exit 0
-                //     echo 'Downloading unzip'
-                //     mkdir -p jenkins-tools
-                //     curl -o jenkins-tools/unzip.deb http://security.ubuntu.com/ubuntu/pool/main/u/unzip/unzip_6.0-9ubuntu1.5_amd64.deb
-                //     dpkg-deb -x jenkins-tools/unzip.deb jenkins-tools/
-                //     ls jenkins-tools
-                //     echo 'Successfully downloaded unzip'
-                // '''
                 sh '''
                     ls jenkins-tools/packer >>/dev/null 2>&1 && exit 0
                     echo 'Downloading Packer'
@@ -23,6 +13,7 @@ pipeline {
                     curl -o jenkins-tools/packer.zip 'https://releases.hashicorp.com/packer/1.2.1/packer_1.2.1_linux_amd64.zip'
                     unzip jenkins-tools/packer.zip && mv packer jenkins-tools/
                     chmod +x jenkins-tools/packer 
+                    rm jenkins-tools/packer.zip
                     echo 'Successfully downloaded Packer'
                 '''
              }
