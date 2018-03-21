@@ -37,11 +37,11 @@ pipeline {
             steps{
                 sh 'npm pack'
                 withCredentials([file(credentialsId: 'limitd-packer-secrets.json', variable: 'PACKER_SECRETS')]){
-                    sh '''jenkins-tools/packer build 
-                    -var ami_name='mcordischi-limitd'
-                    -var node_version='4.8.7'
-                    -var node_pack='limitd-5.5.2.tgz'
-                    -var-file=${PACKER_SECRETS}
+                    sh '''jenkins-tools/packer build \
+                    -var ami_name='mcordischi-limitd'\
+                    -var node_version='4.8.7'\
+                    -var node_pack='limitd-5.5.2.tgz'\
+                    -var-file=${PACKER_SECRETS}\
                     build/packer.json
                 '''
                 }
