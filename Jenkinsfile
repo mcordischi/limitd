@@ -45,10 +45,10 @@ pipeline {
                 withCredentials([file(credentialsId: 'limitd-packer-secrets.json', variable: 'PACKER_SECRETS')]){
                     sh 'cat node-pack-name'
                     sh '''jenkins-tools/packer build \
-                    -var ami_name='$JOB_NAME-$(cat node-pack-name)'\
-                    -var node_version='${env.NODE_VERSION}'\
-                    -var nvm_version='${env.NVM_VERSION}'\
-                    -var node_pack='$(cat node-pack-name)'\
+                    -var "ami_name='$JOB_NAME-$(cat node-pack-name)'"\
+                    -var "node_version='$NODE_VERSION'"\
+                    -var "nvm_version='$NVM_VERSION'"\
+                    -var "node_pack='$(cat node-pack-name)'"\
                     -var-file=${PACKER_SECRETS}\
                     deploy/packer.json
                 '''
