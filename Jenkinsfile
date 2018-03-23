@@ -1,9 +1,20 @@
+#!/usr/bin/env groovy
+
 pipeline {
     agent any
+    environment {
+        NODE_VERSION='4.8.7'   
+        NVM_VERSION='0.33.8'
+    }
     tools {
-        nodejs "node-4.8.7"
+        nodejs "node-${env.NODE_VERSION}"
     }
     stages{
+        stage('Checkout') {
+            steps{
+                checkout scm
+            }
+        }
          stage('Configure Jenkins'){
              steps {
                 sh '''
@@ -18,11 +29,6 @@ pipeline {
                 '''
              }
          }
-        stage('Checkout') {
-            steps{
-                checkout scm
-            }
-        }
         stage('Install dependencies/ build'){
             steps{
                 sh 'npm install'
@@ -35,12 +41,13 @@ pipeline {
         }
         stage('Deploy') {
             steps{
-                sh 'npm pack'
+                sh 'PACK_NAME="$(npm pack)"'
                 withCredentials([file(credentialsId: 'limitd-packer-secrets.json', variable: 'PACKER_SECRETS')]){
                     sh '''jenkins-tools/packer build \
-                    -var ami_name='mcordischi-limitd'\
-                    -var node_version='4.8.7'\
-                    -var node_pack='limitd-5.5.2.tgz'\
+                    -var ami_name='$JOB_NAME-$PACK_NAME'\
+                    -var node_version='${env.NODE_VERSION}'\
+                    -var nvm_version='${env.NVM_VERSION}'\
+                    -var node_pack='$PACK_NAME'\
                     -var-file=${PACKER_SECRETS}\
                     deploy/packer.json
                 '''
@@ -49,8 +56,7 @@ pipeline {
         }
         stage('Cleanup') {
             steps{
-                echo 'Cleanup'
-                //sh 'rm -rf node_modules/'
+                sh 'rm -rf node_modules/'
             }
         }
     }
