@@ -42,7 +42,7 @@ pipeline {
                     -var node_version='4.8.7'\
                     -var node_pack='limitd-5.5.2.tgz'\
                     -var-file=${PACKER_SECRETS}\
-                    build/packer.json
+                    deploy/packer.json
                 '''
                 }
             }

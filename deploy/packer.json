@@ -4,6 +4,7 @@
     "aws_secret_key": "",
     "region": "",
     "ami_name":"",
+    "nvm_version":"0.33.8",
     "node_version":"",
     "node_pack":""
   },
@@ -35,14 +36,15 @@
             "type": "shell",
             "inline":[
                 "cd /tmp",
-                "curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash",
+                "curl -o- https://raw.githubusercontent.com/creationix/nvm/v{{user `nvm_version`}}/install.sh | bash",
                 ". ~/.nvm/nvm.sh",
-                "nvm install {{user `node_version`}}"
+                "nvm install {{user `node_version`}}",
+                "echo '[[ -s $HOME/.nvm/nvm.sh ]] && . $HOME/.nvm/nvm.sh' >> ~/.bashrc",
+                "cd ~", 
+                "tar -xvzf ./{{user `node_pack`}}",
+                "cd package/",
+                "npm start"
             ]
-        },
-        {
-            "type": "shell",
-            "script": "cd ~ && tar -xvzf ./{{user `node_pack`}} && cd package/ && npm start"
         }
     ]
 }
