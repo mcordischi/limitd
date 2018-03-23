@@ -41,7 +41,7 @@
                 "nvm install {{user `node_version`}}",
                 "echo '[[ -s $HOME/.nvm/nvm.sh ]] && . $HOME/.nvm/nvm.sh' >> ~/.bashrc",
                 "cd ~", 
-                "tar -xvzf ./{{user `node_pack`}}",
+                "tar -xvzf ./{{user `node_pack`}} >>/dev/null",
                 "cd package/",
                 "npm start"
             ]
