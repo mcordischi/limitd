@@ -41,14 +41,14 @@ pipeline {
         }
         stage('Deploy') {
             steps{
-                sh 'PACK_NAME="$(npm pack)"'
-                sh 'echo "$JOB_NAME-$PACK_NAME"'
+                sh 'npm pack >node-pack-name'
                 withCredentials([file(credentialsId: 'limitd-packer-secrets.json', variable: 'PACKER_SECRETS')]){
+                    sh 'cat node-pack-name'
                     sh '''jenkins-tools/packer build \
-                    -var ami_name='$JOB_NAME-$PACK_NAME'\
+                    -var ami_name='$JOB_NAME-$(cat node-pack-name)'\
                     -var node_version='${env.NODE_VERSION}'\
                     -var nvm_version='${env.NVM_VERSION}'\
-                    -var node_pack='$PACK_NAME'\
+                    -var node_pack='$(cat node-pack-name)'\
                     -var-file=${PACKER_SECRETS}\
                     deploy/packer.json
                 '''
