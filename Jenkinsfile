@@ -57,6 +57,8 @@ pipeline {
         stage('Cleanup') {
             steps{
                 sh 'rm -rf node_modules/'
+                sh 'rm $(cat node-pack-name)'
+                sh 'rm node-pack-name'
             }
         }
     }
